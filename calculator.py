@@ -16,19 +16,25 @@ def circle_perimeter(radius):
 
 if __name__ == "__main__":
     print("Area & Perimeter Calculator (Sprint 1 Prototype)")
-    print("Choose shape: 1) Rectangle  2) Circle")
-    choice = input("Enter choice: ")
+    
+    while True:
+        print("\nChoose shape: 1) Rectangle  2) Circle  3) Exit")
+        choice = input("Enter choice (1/2/3): ")
 
-    if choice == "1":
-        l = float(input("Enter length: "))
-        w = float(input("Enter width: "))
-        print(f"Rectangle Area = {rectangle_area(l, w):.2f}")
-        print(f"Rectangle Perimeter = {rectangle_perimeter(l, w):.2f}")
+        if choice == "1":
+            l = float(input("Enter length: "))
+            w = float(input("Enter width: "))
+            print(f"Rectangle Area = {rectangle_area(l, w):.2f}")
+            print(f"Rectangle Perimeter = {rectangle_perimeter(l, w):.2f}")
 
-    elif choice == "2":
-        r = float(input("Enter radius: "))
-        print(f"Circle Area = {circle_area(r):.2f}")
-        print(f"Circle Circumference = {circle_perimeter(r):.2f}")
+        elif choice == "2":
+            r = float(input("Enter radius: "))
+            print(f"Circle Area = {circle_area(r):.2f}")
+            print(f"Circle Circumference = {circle_perimeter(r):.2f}")
 
-    else:
-        print("Invalid choice.")
+        elif choice == "3" or choice.lower() == "exit":
+            print("Exiting the calculator.")
+            break
+
+        else:
+            print("Invalid choice. Please try again.")
