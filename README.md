@@ -19,5 +19,4 @@
 
 ### 📌 Next Sprint (Week 2 Preview)
 - Add more shapes (triangle, square, etc).
-- Improve user interface (menu system).
-- Expand automated testing.
+- Add exit 
