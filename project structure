@@ -4,7 +4,7 @@ area-perimeter-calculator/        # root project folder
 │   ├── __init__.py
 │   └── calculator.py            # CLI calculator
 │
-├── data/                        # เก็บ JSON persistence (optional ต่อยอด API)
+├── data/                        # เก็บ JSON persistence
 │   └── history.json
 │
 ├── tests/                       # unit tests
