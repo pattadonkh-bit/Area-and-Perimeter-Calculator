@@ -1,0 +1,18 @@
+area-perimeter-calculator/           # root folder ของโปรเจกต์
+│
+├── app/                             # โค้ดหลัก (Codebase)
+│   ├── __init__.py
+│   └── calculator.py                # Codebase หลัก (ฟังก์ชันคำนวณ + CLI + JSON persistence)
+│
+├── tests/                           # Unit tests
+│   └── test_shapes.py
+│
+├── data/                             # เก็บ JSON persistence
+│   └── history.json
+│
+├── run.sh                             # Bash script สำหรับรัน CLI (helper)
+├── Dockerfile                         # สำหรับต่อยอด Docker deployment
+├── requirements.txt                   # Dependencies (pytest, fastapi, uvicorn)
+├── README.md                          # คู่มือโปรเจกต์
+├── gcloud-deploy.md                   # ขั้นตอน deploy Google Cloud Run (optional)
+└── .gitignore                         # ไฟล์ที่ไม่ต้อง push ขึ้น GitHub
