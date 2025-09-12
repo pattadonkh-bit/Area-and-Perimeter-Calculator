@@ -7,7 +7,6 @@ area-perimeter-calculator/           # root folder ของโปรเจก�
 ├── tests/                           # Unit tests
 │   └── test_shapes.py
 │
-│
 ├── run.sh                             # Bash script สำหรับรัน CLI (helper)
 ├── Dockerfile                         # สำหรับต่อยอด Docker deployment
 ├── requirements.txt                   # Dependencies (pytest, fastapi, uvicorn)
