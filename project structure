@@ -1,0 +1,17 @@
+area-perimeter-calculator/        # root project folder
+│
+├── app/                         # โค้ดหลัก
+│   ├── __init__.py
+│   └── calculator.py            # CLI calculator
+│
+├── data/                        # เก็บ JSON persistence (optional ต่อยอด API)
+│   └── history.json
+│
+├── tests/                       # unit tests
+│   └── test_shapes.py
+│
+├── run.sh                        # bash script สำหรับรันโปรแกรม
+├── Dockerfile                    # สำหรับต่อยอด Docker deployment
+├── requirements.txt              # dependencies
+├── README.md                     # คู่มือโปรเจกต์
+└── .gitignore                    # ignore ไฟล์ไม่จำเป็น
