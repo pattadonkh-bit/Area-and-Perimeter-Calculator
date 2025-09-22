@@ -76,89 +76,52 @@ def index():
             results[shape] = {"error": str(e)}
 
     return render_template_string("""
+    <html>
+    <head>
+        <title>Area & Perimeter Calculator</title>
+        <style>
+            body { font-family: Arial, sans-serif; background-color: #f2f2f2; padding: 20px; }
+            h2 { text-align: center; }
+            .card { background: #fff; padding: 20px; margin: 15px auto; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); width: 300px; }
+            form input { width: 100%; padding: 5px; margin: 5px 0; }
+            button { background-color: #4CAF50; color: white; border: none; padding: 8px 12px; border-radius: 5px; cursor: pointer; }
+            button:hover { background-color: #45a049; }
+            p { margin: 5px 0; }
+            .error { color: red; }
+        </style>
+    </head>
+    <body>
         <h2>Area & Perimeter Calculator</h2>
 
-        <!-- Rectangle -->
-        <h3>Rectangle</h3>
-        <form method="post">
-            <input type="hidden" name="shape" value="rectangle">
-            Length: <input type="number" step="any" name="length"><br>
-            Width: <input type="number" step="any" name="width"><br>
-            <button type="submit">Calculate</button>
-        </form>
-        {% if results.rectangle %}
-            {% if results.rectangle.error %}
-                <p style="color:red">{{ results.rectangle.error }}</p>
-            {% else %}
-                <p>Area = {{ results.rectangle.area }}, Perimeter = {{ results.rectangle.perimeter }}</p>
-            {% endif %}
-        {% endif %}
+        {% for shape_name, form_fields in [('rectangle',['length','width']),
+                                           ('circle',['radius']),
+                                           ('square',['side']),
+                                           ('triangle',['a','b','c','h']),
+                                           ('parallelogram',['base','height','a','b'])] %}
 
-        <!-- Circle -->
-        <h3>Circle</h3>
-        <form method="post">
-            <input type="hidden" name="shape" value="circle">
-            Radius: <input type="number" step="any" name="radius"><br>
-            <button type="submit">Calculate</button>
-        </form>
-        {% if results.circle %}
-            {% if results.circle.error %}
-                <p style="color:red">{{ results.circle.error }}</p>
-            {% else %}
-                <p>Area = {{ results.circle.area }}, Perimeter = {{ results.circle.perimeter }}</p>
-            {% endif %}
-        {% endif %}
+            <div class="card">
+                <h3>{{ shape_name.capitalize() }}</h3>
+                <form method="post">
+                    <input type="hidden" name="shape" value="{{ shape_name }}">
+                    {% for field in form_fields %}
+                        {{ field.capitalize() }}: <input type="number" step="any" name="{{ field }}" value="{{ request.form.get(field,'') }}"><br>
+                    {% endfor %}
+                    <button type="submit">Calculate</button>
+                </form>
 
-        <!-- Square -->
-        <h3>Square</h3>
-        <form method="post">
-            <input type="hidden" name="shape" value="square">
-            Side: <input type="number" step="any" name="side"><br>
-            <button type="submit">Calculate</button>
-        </form>
-        {% if results.square %}
-            {% if results.square.error %}
-                <p style="color:red">{{ results.square.error }}</p>
-            {% else %}
-                <p>Area = {{ results.square.area }}, Perimeter = {{ results.square.perimeter }}</p>
-            {% endif %}
-        {% endif %}
+                {% set res = results.get(shape_name) %}
+                {% if res %}
+                    {% if res.get('error') %}
+                        <p class="error">{{ res.error }}</p>
+                    {% else %}
+                        <p>Area = {{ res.area }}, Perimeter = {{ res.perimeter }}</p>
+                    {% endif %}
+                {% endif %}
+            </div>
 
-        <!-- Triangle -->
-        <h3>Triangle</h3>
-        <form method="post">
-            <input type="hidden" name="shape" value="triangle">
-            a: <input type="number" step="any" name="a"><br>
-            b: <input type="number" step="any" name="b"><br>
-            c: <input type="number" step="any" name="c"><br>
-            height: <input type="number" step="any" name="h"><br>
-            <button type="submit">Calculate</button>
-        </form>
-        {% if results.triangle %}
-            {% if results.triangle.error %}
-                <p style="color:red">{{ results.triangle.error }}</p>
-            {% else %}
-                <p>Area = {{ results.triangle.area }}, Perimeter = {{ results.triangle.perimeter }}</p>
-            {% endif %}
-        {% endif %}
-
-        <!-- Parallelogram -->
-        <h3>Parallelogram</h3>
-        <form method="post">
-            <input type="hidden" name="shape" value="parallelogram">
-            Base: <input type="number" step="any" name="base"><br>
-            Height: <input type="number" step="any" name="height"><br>
-            Side a: <input type="number" step="any" name="a"><br>
-            Side b: <input type="number" step="any" name="b"><br>
-            <button type="submit">Calculate</button>
-        </form>
-        {% if results.parallelogram %}
-            {% if results.parallelogram.error %}
-                <p style="color:red">{{ results.parallelogram.error }}</p>
-            {% else %}
-                <p>Area = {{ results.parallelogram.area }}, Perimeter = {{ results.parallelogram.perimeter }}</p>
-            {% endif %}
-        {% endif %}
+        {% endfor %}
+    </body>
+    </html>
     """, results=results)
 
 if __name__ == "__main__":
