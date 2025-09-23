@@ -47,9 +47,9 @@ def index():
             elif shape == "triangle":
                 if not request.form["a"] or not request.form["b"] or not request.form["c"] or not request.form["h"]:
                     raise ValueError("กรอกให้ครบทุกช่อง")
-                a = float(request.form["a"])
-                b = float(request.form["b"])
-                c = float(request.form["c"])
+                a = float(request.form["A"])
+                b = float(request.form["B"])
+                c = float(request.form["base"])
                 h = float(request.form["h"])
                 if min(a, b, c, h) <= 0:
                     raise ValueError("All sides and height must be positive")
