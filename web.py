@@ -45,32 +45,62 @@ def index():
                 }
 
             elif shape == "triangle":
-                if not request.form["a"] or not request.form["b"] or not request.form["c"] or not request.form["h"]:
-                    raise ValueError("กรอกให้ครบทุกช่อง")
-                a = float(request.form["A"])
-                b = float(request.form["B"])
-                c = float(request.form["base"])
-                h = float(request.form["h"])
-                if min(a, b, c, h) <= 0:
-                    raise ValueError("All sides and height must be positive")
-                results["triangle"] = {
-                    "area": calculator.triangle_area(a, h),
-                    "perimeter": calculator.triangle_perimeter(a, b, c)
-                }
+                base = request.form.get("base")
+                h = request.form.get("h")
+                a = request.form.get("a")
+                b = request.form.get("b")
+
+                if not base or not h:
+                    raise ValueError("กรอก base และ h อย่างน้อย")
+
+                base = float(base)
+                h = float(h)
+                if base <= 0 or h <= 0:
+                    raise ValueError("Base และ Height ต้องเป็นบวก")
+
+                # กรณีกรอกแค่ base + h → แสดงแค่ area
+                if not a or not b:
+                    results["triangle"] = {
+                        "area": calculator.triangle_area(base, h)
+                    }
+                else:
+                    a = float(a)
+                    b = float(b)
+                    if min(a, b) <= 0:
+                        raise ValueError("Sides ต้องเป็นบวก")
+                    results["triangle"] = {
+                        "area": calculator.triangle_area(base, h),
+                        "perimeter": calculator.triangle_perimeter(a, b, base)
+                    }
 
             elif shape == "parallelogram":
-                if not request.form["base"] or not request.form["height"] or not request.form["a"] or not request.form["b"]:
-                    raise ValueError("กรอกให้ครบทุกช่อง")
-                base = float(request.form["base"])
-                height = float(request.form["height"])
-                a = float(request.form["a"])
-                b = float(request.form["b"])
-                if min(base, height, a, b) <= 0:
-                    raise ValueError("Base, height, and sides must be positive")
-                results["parallelogram"] = {
-                    "area": calculator.parallelogram_area(base, height),
-                    "perimeter": calculator.parallelogram_perimeter(a, b)
-                }
+                base = request.form.get("base")
+                height = request.form.get("height")
+                a = request.form.get("a")
+                b = request.form.get("b")
+
+                if not base or not height:
+                    raise ValueError("กรอก base และ height อย่างน้อย")
+
+                base = float(base)
+                height = float(height)
+                if base <= 0 or height <= 0:
+                    raise ValueError("Base และ Height ต้องเป็นบวก")
+
+                # ถ้ามีแค่ base + height → area
+                if not a or not b:
+                    results["parallelogram"] = {
+                        "area": calculator.parallelogram_area(base, height)
+                    }
+                else:
+                    a = float(a)
+                    b = float(b)
+                    if a <= 0 or b <= 0:
+                        raise ValueError("Sides ต้องเป็นบวก")
+                    results["parallelogram"] = {
+                        "area": calculator.parallelogram_area(base, height),
+                        "perimeter": calculator.parallelogram_perimeter(a, b)
+                    }
 
         except (ValueError, KeyError) as e:
             results[shape] = {"error": str(e)}
@@ -93,11 +123,13 @@ def index():
     <body>
         <h2>Area & Perimeter Calculator</h2>
 
-        {% for shape_name, form_fields in [('rectangle',['length','width']),
-                                           ('circle',['radius']),
-                                           ('square',['side']),
-                                           ('triangle',['a','b','c','h']),
-                                           ('parallelogram',['base','height','a','b'])] %}
+        {% for shape_name, form_fields in [
+            ('rectangle',['length','width']),
+            ('circle',['radius']),
+            ('square',['side']),
+            ('triangle',['base','h','a','b']),
+            ('parallelogram',['base','height','a','b'])
+        ] %}
 
             <div class="card">
                 <h3>{{ shape_name.capitalize() }}</h3>
@@ -114,7 +146,8 @@ def index():
                     {% if res.get('error') %}
                         <p class="error">{{ res.error }}</p>
                     {% else %}
-                        <p>Area = {{ res.area }}, Perimeter = {{ res.perimeter }}</p>
+                        {% if res.get('area') %}<p>Area = {{ res.area }}</p>{% endif %}
+                        {% if res.get('perimeter') %}<p>Perimeter = {{ res.perimeter }}</p>{% endif %}
                     {% endif %}
                 {% endif %}
             </div>
