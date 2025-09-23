@@ -50,28 +50,39 @@ def index():
                 a = request.form.get("a")
                 b = request.form.get("b")
 
-                if not base or not h:
-                    raise ValueError("กรอก base และ h อย่างน้อย")
+                if not base:
+                    raise ValueError("กรอก base อย่างน้อย")
 
                 base = float(base)
-                h = float(h)
-                if base <= 0 or h <= 0:
-                    raise ValueError("Base และ Height ต้องเป็นบวก")
+                if base <= 0:
+                    raise ValueError("Base ต้องเป็นบวก")
 
-                # กรณีกรอกแค่ base + h → แสดงแค่ area
-                if not a or not b:
-                    results["triangle"] = {
-                        "area": calculator.triangle_area(base, h)
-                    }
-                else:
+                if h:
+                    h = float(h)
+                    if h <= 0:
+                        raise ValueError("Height ต้องเป็นบวก")
+
+                if a and b:
                     a = float(a)
                     b = float(b)
-                    if min(a, b) <= 0:
+                    if a <= 0 or b <= 0:
                         raise ValueError("Sides ต้องเป็นบวก")
-                    results["triangle"] = {
-                        "area": calculator.triangle_area(base, h),
-                        "perimeter": calculator.triangle_perimeter(a, b, base)
-                    }
+                    if h:
+                        results["triangle"] = {
+                            "area": calculator.triangle_area(base, h),
+                            "perimeter": calculator.triangle_perimeter(a, b, base)
+                        }
+                    else:
+                        results["triangle"] = {
+                            "perimeter": calculator.triangle_perimeter(a, b, base)
+                        }
+                else:
+                    if h:
+                        results["triangle"] = {
+                            "area": calculator.triangle_area(base, h)
+                        }
+                    else:
+                        raise ValueError("กรอก base + h หรือ a+b")
 
             elif shape == "parallelogram":
                 base = request.form.get("base")
@@ -79,28 +90,39 @@ def index():
                 a = request.form.get("a")
                 b = request.form.get("b")
 
-                if not base or not height:
-                    raise ValueError("กรอก base และ height อย่างน้อย")
+                if not base:
+                    raise ValueError("กรอก base อย่างน้อย")
 
                 base = float(base)
-                height = float(height)
-                if base <= 0 or height <= 0:
-                    raise ValueError("Base และ Height ต้องเป็นบวก")
+                if base <= 0:
+                    raise ValueError("Base ต้องเป็นบวก")
 
-                # ถ้ามีแค่ base + height → area
-                if not a or not b:
-                    results["parallelogram"] = {
-                        "area": calculator.parallelogram_area(base, height)
-                    }
-                else:
+                if height:
+                    height = float(height)
+                    if height <= 0:
+                        raise ValueError("Height ต้องเป็นบวก")
+
+                if a and b:
                     a = float(a)
                     b = float(b)
                     if a <= 0 or b <= 0:
                         raise ValueError("Sides ต้องเป็นบวก")
-                    results["parallelogram"] = {
-                        "area": calculator.parallelogram_area(base, height),
-                        "perimeter": calculator.parallelogram_perimeter(a, b)
-                    }
+                    if height:
+                        results["parallelogram"] = {
+                            "area": calculator.parallelogram_area(base, height),
+                            "perimeter": calculator.parallelogram_perimeter(a, b)
+                        }
+                    else:
+                        results["parallelogram"] = {
+                            "perimeter": calculator.parallelogram_perimeter(a, b)
+                        }
+                else:
+                    if height:
+                        results["parallelogram"] = {
+                            "area": calculator.parallelogram_area(base, height)
+                        }
+                    else:
+                        raise ValueError("กรอก base + height หรือ a+b")
 
         except (ValueError, KeyError) as e:
             results[shape] = {"error": str(e)}
